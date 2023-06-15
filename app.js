@@ -13,6 +13,7 @@ import db from './config/db.js'
 import {} from './models/Usuario.js'
 import {} from './models/Categoria.js'
 import {} from './models/Grupo.js'
+import {} from './models/Meeti.js'
 dotenv.config()
 
 //* Generar tablas

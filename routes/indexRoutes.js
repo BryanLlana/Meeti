@@ -21,7 +21,7 @@ import {
   mostrarFormularioGrupo,
   subirImagen
 } from '../controllers/gruposControllers.js'
-import { mostrarFormNuevoMeeti } from '../controllers/meetiControllers.js'
+import { crearMeeti, mostrarFormNuevoMeeti } from '../controllers/meetiControllers.js'
 
 const router = express.Router()
 
@@ -53,5 +53,6 @@ router.post('/eliminar-grupo/:id', protegerRuta, eliminarGrupo)
 
 //* Nuevos meetis
 router.get('/nuevo-meeti', protegerRuta, mostrarFormNuevoMeeti)
+router.post('/nuevo-meeti', protegerRuta, crearMeeti)
 
 export default router

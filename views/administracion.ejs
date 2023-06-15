@@ -9,33 +9,28 @@
   </div>
 
   <div class="seccion-admin">
-    <h2>Tus Meeti's</h2>
-    <ul>
-      <li>
-        <div class="informacion-admin">
-          <p class="fecha">Lunes, 22 de Mayo de 2019</p>
-          <h3>E-commerce en México</h3>
-          <small>23 Asistentes</small>
-        </div>
-        <div class="acciones contenedor-botones">
-          <a href="#" class="btn btn-verde">Editar</a>
-          <a href="#" class="btn btn-azul2">Asistentes</a>
-          <a href="#" class="btn btn-rojo">Eliminar</a>
-        </div>
-      </li>
-      <li>
-        <div class="informacion-admin">
-          <p class="fecha">Lunes, 22 de Mayo de 2019</p>
-          <h3>E-commerce en México</h3>
-          <small>23 Asistentes</small>
-        </div>
-        <div class="acciones contenedor-botones">
-          <a href="#" class="btn btn-verde">Editar</a>
-          <a href="#" class="btn btn-azul2">Asistentes</a>
-          <a href="#" class="btn btn-rojo">Eliminar</a>
-        </div>
-      </li>
-    </ul>
+    <h2>Próximos Meeti's</h2>
+    <% if(meetis.length){ %>
+      <ul>
+        <% meetis.forEach(meeti => { %>
+          <li>
+            <div class="informacion-admin">
+              <% moment.locale('es') %>
+              <p class="fecha"><%- moment(meeti.fecha + ' ' + meeti.hora).format('LLLL') %> Horas</p>
+              <h3><%- meeti.titulo %></h3>
+              <small>23 Asistentes</small>
+            </div>
+            <div class="acciones contenedor-botones">
+              <a href="/editar-meeti/<%- meeti.id %>" class="btn btn-verde">Editar</a>
+              <a href="/asistentes-meeti/<%- meeti.id %>" class="btn btn-azul2">Asistentes</a>
+              <a href="/eliminar-meeti/<%- meeti.id %>" class="btn btn-rojo">Eliminar</a>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No tienes meeti's creados</p>
+    <% } %>
   </div>
 
   <div class="seccion-admin">
@@ -57,6 +52,31 @@
       </ul>
     <% } else { %>
       <p>No tienes un grupo creado</p>
+    <% } %>
+  </div>
+
+  <div class="seccion-admin">
+    <h2>Meeti's Pasados</h2>
+    <% if(anteriores.length){ %>
+      <ul>
+        <% anteriores.forEach(meeti => { %>
+          <li>
+            <div class="informacion-admin">
+              <% moment.locale('es') %>
+              <p class="fecha"><%- moment(meeti.fecha + ' ' + meeti.hora).format('LLLL') %> Horas</p>
+              <h3><%- meeti.titulo %></h3>
+              <small>23 Asistentes</small>
+            </div>
+            <div class="acciones contenedor-botones">
+              <a href="/editar-meeti/<%- meeti.id %>" class="btn btn-verde">Editar</a>
+              <a href="/asistentes-meeti/<%- meeti.id %>" class="btn btn-azul2">Asistentes</a>
+              <a href="/eliminar-meeti/<%- meeti.id %>" class="btn btn-rojo">Eliminar</a>
+            </div>
+          </li>
+        <% }) %>
+      </ul>
+    <% } else { %>
+      <p>No hay Meeti's pasados</p>
     <% } %>
   </div>
 </main>
