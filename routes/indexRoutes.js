@@ -14,7 +14,8 @@ import {
   mostrarFormularioCrearCuenta,
   mostrarFormularioInicarSesion,
   subirImagen as subirImagenUsuario,
-  subirImagenPerfil
+  subirImagenPerfil,
+  cerrarSesion
 } from '../controllers/usuariosControllers.js'
 import { mostrarPanelAdministracion } from '../controllers/adminControllers.js'
 import {
@@ -51,6 +52,9 @@ router.get('/confirmar-cuenta/:email', mostrarConfirmarCuenta)
 //* Funcionamiento autenticación
 router.get('/iniciar-sesion', mostrarFormularioInicarSesion)
 router.post('/iniciar-sesion', iniciarSesion)
+
+//* Cerrar sesion
+router.post('/cerrar-sesion', protegerRuta, cerrarSesion)
 
 //* Panel de administración
 router.get('/administracion', protegerRuta, mostrarPanelAdministracion)

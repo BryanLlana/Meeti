@@ -17,6 +17,8 @@ const protegerRuta = async (req = request, res = response, next) => {
 
     if (usuarioObtenido) {
       req.usuario = usuarioObtenido
+      //* Verificar autenticacion con partials
+      res.locals.usuario = usuarioObtenido
       return next()
     } else {
       return res.redirect('iniciar-sesion')

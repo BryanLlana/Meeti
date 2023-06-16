@@ -119,6 +119,10 @@ const iniciarSesion = async (req = request, res = response) => {
   }).redirect('/administracion')
 }
 
+const cerrarSesion = async (req = request, res = response) => {
+  return res.clearCookie('_token').status(200).redirect('/iniciar-sesion')
+}
+
 const mostrarFormEditarPerfil = async (req = request, res = response) => {
   const usuario = await Usuario.findByPk(req.usuario.id)
 
@@ -261,6 +265,7 @@ export {
   mostrarConfirmarCuenta,
   mostrarFormularioInicarSesion,
   iniciarSesion,
+  cerrarSesion,
   mostrarFormEditarPerfil,
   editarPerfil,
   mostrarFormPassword,
