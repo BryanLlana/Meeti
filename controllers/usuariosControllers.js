@@ -1,6 +1,10 @@
 import { request, response } from 'express'
 import { check, validationResult } from 'express-validator'
 import bcrypt from 'bcrypt'
+import multer from 'multer'
+import shortid from 'shortid'
+import * as url from 'url'
+import fs from 'fs'
 
 import Usuario from '../models/Usuario.js'
 import { emailRegistro } from '../helpers/email.js'
@@ -175,6 +179,82 @@ const modificarPassword = async (req = request, res = response) => {
   res.redirect('/iniciar-sesion')
 }
 
+const mostrarFormImagenPerfil = async (req = request, res = response) => {
+  const usuario = await Usuario.findByPk(req.usuario.id)
+
+  res.render('imagen-perfil', {
+    nombrePagina: 'Subir Imagen Perfil',
+    usuario
+  })
+}
+
+//* Subir imagenes
+const configuracionMulter = {
+  limits: { fileSize: 200000 }, // * Tamaño maximo 200KB
+  storage: multer.diskStorage({
+    destination: (req, file, next) => {
+      const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+      next(null, __dirname + '/../public/uploads/perfiles/')
+    },
+    filename: (req, file, next) => {
+      const extension = file.mimetype.split('/')[1]
+      next(null, `${shortid.generate()}.${extension}`)
+    }
+  }),
+  fileFilter (req, file, next) {
+    if (file.mimetype === 'image/jpeg' || file.mimetype === 'image/png') {
+      return next(null, true)
+    } else {
+      return next(new Error('Formato no válido'), false)
+    }
+  }
+}
+
+const upload = multer(configuracionMulter).single('imagen')
+
+const subirImagen = (req = request, res = response, next) => {
+  upload(req, res, function (error) {
+    if (error) {
+      if (error instanceof multer.MulterError) {
+        if (error.code === 'LIMIT_FILE_SIZE') {
+          req.flash('error', 'El archivo es muy grande')
+        } else {
+          req.flash('error', error.message)
+        }
+      } else if (error.hasOwnProperty('message')) {
+        req.flash('error', error.message)
+      }
+      return res.redirect('back')
+    } else {
+      next()
+    }
+  })
+}
+
+const subirImagenPerfil = async (req = request, res = response) => {
+  const usuario = await Usuario.findByPk(req.usuario.id)
+
+  //* Si hay imagen anterior y nueva, borrar la anterior
+  if (req.file && usuario.img) {
+    const __dirname = url.fileURLToPath(new URL('.', import.meta.url))
+    const imagenAnteriorPath = __dirname + `/../public/uploads/perfiles/${usuario.img}`
+
+    //* Eliminar archivo
+    fs.unlinkSync(imagenAnteriorPath, (error) => {
+      return console.log(error)
+    })
+  }
+
+  //* Si hay imagen nueva
+  if (req.file) {
+    usuario.img = req.file.filename
+  }
+
+  await usuario.save()
+  req.flash('exito', 'Imagen subida correctamente')
+  res.redirect('/administracion')
+}
+
 export {
   mostrarFormularioCrearCuenta,
   crearNuevaCuenta,
@@ -184,5 +264,8 @@ export {
   mostrarFormEditarPerfil,
   editarPerfil,
   mostrarFormPassword,
-  modificarPassword
+  modificarPassword,
+  mostrarFormImagenPerfil,
+  subirImagen,
+  subirImagenPerfil
 }

@@ -9,9 +9,12 @@ import {
   modificarPassword,
   mostrarConfirmarCuenta,
   mostrarFormEditarPerfil,
+  mostrarFormImagenPerfil,
   mostrarFormPassword,
   mostrarFormularioCrearCuenta,
-  mostrarFormularioInicarSesion
+  mostrarFormularioInicarSesion,
+  subirImagen as subirImagenUsuario,
+  subirImagenPerfil
 } from '../controllers/usuariosControllers.js'
 import { mostrarPanelAdministracion } from '../controllers/adminControllers.js'
 import {
@@ -77,5 +80,9 @@ router.post('/editar-perfil', protegerRuta, editarPerfil)
 //* Password
 router.get('/cambiar-password', protegerRuta, mostrarFormPassword)
 router.post('/cambiar-password', protegerRuta, modificarPassword)
+
+//* Imagen Perfil
+router.get('/imagen-perfil', protegerRuta, mostrarFormImagenPerfil)
+router.post('/imagen-perfil', protegerRuta, subirImagenUsuario, subirImagenPerfil)
 
 export default router
