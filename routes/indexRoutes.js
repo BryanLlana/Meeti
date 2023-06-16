@@ -6,8 +6,10 @@ import {
   crearNuevaCuenta,
   editarPerfil,
   iniciarSesion,
+  modificarPassword,
   mostrarConfirmarCuenta,
   mostrarFormEditarPerfil,
+  mostrarFormPassword,
   mostrarFormularioCrearCuenta,
   mostrarFormularioInicarSesion
 } from '../controllers/usuariosControllers.js'
@@ -71,5 +73,9 @@ router.post('/eliminar-meeti/:id', protegerRuta, eliminarMeeti)
 //* Perfil
 router.get('/editar-perfil', protegerRuta, mostrarFormEditarPerfil)
 router.post('/editar-perfil', protegerRuta, editarPerfil)
+
+//* Password
+router.get('/cambiar-password', protegerRuta, mostrarFormPassword)
+router.post('/cambiar-password', protegerRuta, modificarPassword)
 
 export default router

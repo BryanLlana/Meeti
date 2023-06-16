@@ -1,5 +1,6 @@
 import { request, response } from 'express'
 import { check, validationResult } from 'express-validator'
+import bcrypt from 'bcrypt'
 
 import Usuario from '../models/Usuario.js'
 import { emailRegistro } from '../helpers/email.js'
@@ -146,6 +147,34 @@ const editarPerfil = async (req = request, res = response) => {
   res.redirect('/administracion')
 }
 
+const mostrarFormPassword = async (req = request, res = response) => {
+  res.render('cambiar-password', {
+    nombrePagina: 'Cambiar Password'
+  })
+}
+
+const modificarPassword = async (req = request, res = response) => {
+  const usuario = await Usuario.findByPk(req.usuario.id)
+  let { passwordAnterior, passwordNuevo } = req.body
+
+  //* Verificar el password anterior
+  if (!usuario.validarPassword(passwordAnterior)) {
+    req.flash('error', ['El password actual es incorrecto'])
+    return res.redirect('/cambiar-password')
+  }
+
+  //* Si el password es correcto, hashear el nuevo
+  const salt = bcrypt.genSaltSync(10)
+  passwordNuevo = bcrypt.hashSync(passwordNuevo, salt)
+  console.log(passwordNuevo)
+
+  //* Guardar en la base de datos
+  usuario.password = passwordNuevo
+  await usuario.save()
+  req.flash('exito', ['Password modificado correctamente, vuelve a iniciar sesión'])
+  res.redirect('/iniciar-sesion')
+}
+
 export {
   mostrarFormularioCrearCuenta,
   crearNuevaCuenta,
@@ -153,5 +182,7 @@ export {
   mostrarFormularioInicarSesion,
   iniciarSesion,
   mostrarFormEditarPerfil,
-  editarPerfil
+  editarPerfil,
+  mostrarFormPassword,
+  modificarPassword
 }
