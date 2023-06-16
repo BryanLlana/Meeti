@@ -10,6 +10,7 @@ const Usuario = db.define('usuario', {
   },
   nombre: DataTypes.STRING(60),
   img: DataTypes.STRING(60),
+  descripcion: DataTypes.TEXT,
   email: {
     type: DataTypes.STRING(30),
     allowNull: false,

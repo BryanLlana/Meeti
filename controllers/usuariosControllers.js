@@ -114,10 +114,44 @@ const iniciarSesion = async (req = request, res = response) => {
   }).redirect('/administracion')
 }
 
+const mostrarFormEditarPerfil = async (req = request, res = response) => {
+  const usuario = await Usuario.findByPk(req.usuario.id)
+
+  res.render('editar-perfil', {
+    nombrePagina: 'Editar Perfil',
+    usuario
+  })
+}
+
+const editarPerfil = async (req = request, res = response) => {
+  await check('nombre').notEmpty().withMessage('El nombre no puede estar vacío').run(req)
+  await check('email').notEmpty().withMessage('El email no puede estar vacío').run(req)
+
+  const errores = validationResult(req).array().map(error => error.msg)
+
+  if (errores.length > 0) {
+    req.flash('error', errores)
+    return res.redirect('/editar-perfil')
+  }
+
+  const { nombre, descripcion, email } = req.body
+  const usuario = await Usuario.findByPk(req.usuario.id)
+
+  usuario.nombre = nombre
+  usuario.descripcion = descripcion
+  usuario.email = email
+
+  await usuario.save()
+  req.flash('exito', ['Perfil editado correctamente'])
+  res.redirect('/administracion')
+}
+
 export {
   mostrarFormularioCrearCuenta,
   crearNuevaCuenta,
   mostrarConfirmarCuenta,
   mostrarFormularioInicarSesion,
-  iniciarSesion
+  iniciarSesion,
+  mostrarFormEditarPerfil,
+  editarPerfil
 }

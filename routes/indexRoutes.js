@@ -4,8 +4,10 @@ import protegerRuta from '../middlewares/protegerRuta.js'
 import { mostrarPaginaPrincipal } from '../controllers/homeControllers.js'
 import {
   crearNuevaCuenta,
+  editarPerfil,
   iniciarSesion,
   mostrarConfirmarCuenta,
+  mostrarFormEditarPerfil,
   mostrarFormularioCrearCuenta,
   mostrarFormularioInicarSesion
 } from '../controllers/usuariosControllers.js'
@@ -65,5 +67,9 @@ router.get('/editar-meeti/:id', protegerRuta, mostrarFormEditarMeeti)
 router.post('/editar-meeti/:id', protegerRuta, editarMeeti)
 router.get('/eliminar-meeti/:id', protegerRuta, mostrarFormEliminarMeeti)
 router.post('/eliminar-meeti/:id', protegerRuta, eliminarMeeti)
+
+//* Perfil
+router.get('/editar-perfil', protegerRuta, mostrarFormEditarPerfil)
+router.post('/editar-perfil', protegerRuta, editarPerfil)
 
 export default router
